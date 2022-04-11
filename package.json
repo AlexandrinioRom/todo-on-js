@@ -1,0 +1,25 @@
+{
+  "name": "todo-on",
+  "version": "1.0.0",
+  "description": "desk",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://a_kudrich@bitbucket.org/a_kudrich/js-todo-kudrich.git"
+  },
+  "author": "a.kudrich",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/a_kudrich/js-todo-kudrich#readme",
+  "dependencies": {},
+  "keywords": [
+    "todo"
+  ],
+  "devDependencies": {
+    "eslint": "^8.13.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0"
+  }
+}
