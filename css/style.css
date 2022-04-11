@@ -1,0 +1,54 @@
+/* app styles start */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: inherit;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 0 10px;
+}
+
+
+/* app styles end */
+
+/* create-panel styles start */
+
+
+
+/* create-panel styles end */
+
+/* task-list styles start */
+
+.complete {
+  text-decoration: line-through;
+  color: gray;
+}
+
+/* task-list styles end */
+
+/* filter-panel styles start */
+.filter-panel__radio {
+  appearance: none;
+  cursor: pointer;
+}
+
+.filter-panel__radio:checked {
+  text-decoration: underline;
+  color: blueviolet;
+}
+
+.all::after {
+  content: 'All';
+}
+
+.completed::after {
+  content: 'Completed';
+}
+
+.active::after {
+  content: 'Active';
+}
+/* filter panel styles end */

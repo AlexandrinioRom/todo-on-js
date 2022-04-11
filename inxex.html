@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/reset.css">
+  <link rel="stylesheet" href="/css/overal.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/index.js" defer></script>
+  <title>Todo-list</title>
+</head>
+
+<body>
+  <div class="app">
+    <div class="create-panel wrapper">
+      <form class="create-panel__form flex">
+        <input class="create-panel__input" type="text">
+        <button class="create-panel__btn" type="submit">Create</button>
+      </form>
+    </div>
+    <div class="task-list wrapper"></div>
+    <div class="filter-panel wrapper">
+      <form class="filter-panel__form flex">
+        <label class="filter-panel__label-all">
+          <input class="filter-panel__radio all" type="radio" name="filter" checked>
+        </label>
+        <label class="filter-panel__label-completed">
+          <input class="filter-panel__radio completed" type="radio" name="filter">
+        </label>
+        <label class="filter-panel__label-active">
+          <input class="filter-panel__radio active" type="radio" name="filter">
+        </label>
+      </form>
+    </div>
+  </div>
+</body>
+
+</html>
