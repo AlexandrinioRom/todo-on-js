@@ -22,12 +22,12 @@
     id: getTodoId(), completed: false, value: text,
   });
 
-  const inputTasksOnTaskList = () => {
+  const putTasksOnTaskList = () => {
     taskList.innerHTML = '';
     state.tasks.map((e) => taskList.insertAdjacentHTML(
       'beforeend',
-      `<div class="task flex ${e.completed ? 'complete' : null}" completed="${e.completed}" id="${e.id}">
-        <input class="task__checkbox" ${e.completed ? 'checked' : null} type="checkbox">
+      `<div class="task flex ${e.completed ? 'complete' : ''}" id="${e.id}">
+        <input class="task__checkbox" ${e.completed ? 'checked' : ''} type="checkbox">
         <span class="task__text">${e.value}</span>
         <button class="task__btn" type="button">x</button>
       </div>`,
@@ -52,44 +52,41 @@
     ];
   };
 
-  const editTask = (id, newValue) => {
-    customMap(id, newValue);
-    inputTasksOnTaskList();
+  const createInput = (taskText) => {
+    const input = document.createElement('input');
+    input.className = 'task__edit-input';
+    input.value = taskText;
+    return input;
+  };
+
+  const editTask = (target) => {
+    const input = createInput(target.innerHTML, target)
+    const task = target.parentElement;
+    task.replaceChild(input, target)
+    const onKeyDownTaskInput = (event) => {
+
+      if (event.keyCode === 13) {
+        customMap(task.id, input.value);
+        putTasksOnTaskList();
+      }
+      if (event.keyCode === 27) {
+        task.replaceChild(target, input);
+        input.blur();
+      }
+    };
+
+    input.addEventListener('keydown', onKeyDownTaskInput);
+    input.focus()
   };
 
   const completeTask = (id) => {
     customMap(id);
-    inputTasksOnTaskList();
+    putTasksOnTaskList();
   };
 
   const deleteTask = (id) => {
     state.tasks = [...state.tasks.filter((task) => task.id !== id)];
-    inputTasksOnTaskList();
-  };
-
-  const createInput = (taskValue, taskText) => {
-    const input = document.createElement('input');
-    input.className = 'task__edit-input';
-    const onKeydown = (event) => {
-      const { target } = event;
-      if (event.keyCode === 13) {
-        target.parentElement.replaceChild(taskText, input);
-        input.blur();
-      }
-      if (event.keyCode === 27) {
-        target.parentElement.replaceChild(taskText, input);
-        input.blur();
-      }
-    };
-    input.value = taskValue;
-    input.addEventListener('keydown', onKeydown);
-    return input;
-  };
-
-  const showInput = (target) => {
-    const input = createInput(target.innerHTML, target);
-    target.parentElement.replaceChild(input, target);
-    input.focus();
+    putTasksOnTaskList();
   };
 
   const onClickCreateButton = (event) => {
@@ -99,27 +96,28 @@
     const taskText = getValueAndClearInput(createPanelInput);
 
     createTaskArray(taskText);
-    inputTasksOnTaskList();
+    putTasksOnTaskList();
     createPanelInput.focus();
   };
 
   const onClickTaskList = (event) => {
     const { target } = event;
+    const taskId = target.parentElement.id;
     if (target.classList.contains('task-list')) return;
 
     if (target.className === 'task__checkbox') {
-      completeTask(target.parentElement.id);
+      completeTask(taskId);
     }
     if (target.className === 'task__btn') {
-      deleteTask(target.parentElement.id);
+      deleteTask(taskId);
     }
 
     if (target.className === 'task__text' && event.detail === 2) {
-      showInput(target);
-      // editTask(target.parentElement.id);
+      editTask(target);
     }
   };
 
   createButton.addEventListener('click', onClickCreateButton);
   taskList.addEventListener('click', onClickTaskList);
+
 }());
