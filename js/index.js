@@ -25,6 +25,19 @@
     id: getTodoId(), completed: false, value: text,
   });
 
+  const filterArr = (id) => {
+    switch (id) {
+      case 'completed':
+        return state.tasks.filter((task) => task.completed);
+
+      case 'active':
+        return state.tasks.filter((task) => !task.completed);
+
+      default:
+        return state.tasks;
+    }
+  };
+
   const putTasksOnTaskList = () => {
     taskList.innerHTML = '';
 
@@ -149,7 +162,7 @@
     state.filter = event.target.id;
     putTasksOnTaskList();
   };
-  
+
   createButton.addEventListener('click', onClickCreateButton);
   taskList.addEventListener('click', onClickTaskList);
   controlPanel.addEventListener('click', onClickControlPanel);
