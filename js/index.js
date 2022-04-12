@@ -1,7 +1,7 @@
 // eslint-disable-next-line func-names
 (function () {
   const createPanelInput = document.querySelector('.create-panel__input');
-  // const filterPanelRado = document.querySelectorAll('.filter-panel__radio');
+  const filterPanelRadio = document.querySelectorAll('.filter-panel__radio');
   const createButton = document.querySelector('.create-panel__btn');
   const taskList = document.querySelector('.task-list');
 
@@ -63,18 +63,24 @@
     const input = createInput(target.innerHTML, target);
     const task = target.parentElement;
     task.replaceChild(input, target);
+
+    const saveEdit = () => {
+      customMap(task.id, input.value);
+      putTasksOnTaskList();
+    };
+
     const onKeyDownTaskInput = (event) => {
       if (event.keyCode === 13) {
-        customMap(task.id, input.value);
-        putTasksOnTaskList();
+        saveEdit();
       }
       if (event.keyCode === 27) {
         task.replaceChild(target, input);
-        input.blur();
+        // input.blur();
       }
     };
 
     input.addEventListener('keydown', onKeyDownTaskInput);
+    input.addEventListener('blur', saveEdit);
     input.focus();
   };
 
@@ -119,3 +125,6 @@
   createButton.addEventListener('click', onClickCreateButton);
   taskList.addEventListener('click', onClickTaskList);
 }());
+
+//если изменил на пустую строку, изменяет стату таски
+//добавь валидацию по инпутам
