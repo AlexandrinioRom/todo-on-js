@@ -33,9 +33,8 @@
         return state.tasks.filter((task) => !task.completed);
 
       default:
-        break;
+        return state.tasks;
     }
-    return state.tasks;
   };
 
   const putTasksOnTaskList = () => {
@@ -90,7 +89,7 @@
   };
 
   const editTask = (target) => {
-    const input = createInput(target.innerHTML, target);
+    const input = createInput(target.innerHTML);
     const task = target.parentElement;
 
     task.replaceChild(input, target);
@@ -159,7 +158,8 @@
       putTasksOnTaskList();
     }
     if (target.classList.contains('control-panel__delete-btn')) {
-      console.log(target);
+      state.tasks = filterArr('active');
+      putTasksOnTaskList();
     }
   };
 
