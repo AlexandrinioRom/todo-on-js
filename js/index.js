@@ -1,7 +1,7 @@
 // eslint-disable-next-line func-names
 (function () {
   const createPanelInput = document.querySelector('.create-panel__input');
-  const filterPanelRadio = document.querySelectorAll('.filter-panel__radio');
+  // const filterPanelRado = document.querySelectorAll('.filter-panel__radio');
   const createButton = document.querySelector('.create-panel__btn');
   const taskList = document.querySelector('.task-list');
 
@@ -63,25 +63,24 @@
     const input = createInput(target.innerHTML, target);
     const task = target.parentElement;
     task.replaceChild(input, target);
-
-    const saveEdit = () => {
+    input.focus();
+    const onBlurTaskInput = () => {
       customMap(task.id, input.value);
       putTasksOnTaskList();
     };
 
     const onKeyDownTaskInput = (event) => {
       if (event.keyCode === 13) {
-        saveEdit();
+        onBlurTaskInput();
       }
       if (event.keyCode === 27) {
+        input.removeEventListener('blur', onBlurTaskInput);
         task.replaceChild(target, input);
-        // input.blur();
       }
     };
 
+    input.addEventListener('blur', onBlurTaskInput);
     input.addEventListener('keydown', onKeyDownTaskInput);
-    input.addEventListener('blur', saveEdit);
-    input.focus();
   };
 
   const completeTask = (id) => {
@@ -125,6 +124,3 @@
   createButton.addEventListener('click', onClickCreateButton);
   taskList.addEventListener('click', onClickTaskList);
 }());
-
-//если изменил на пустую строку, изменяет стату таски
-//добавь валидацию по инпутам
