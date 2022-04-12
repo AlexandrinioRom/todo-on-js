@@ -12,6 +12,7 @@
     tasks: [],
     filter: getFilterStatus(),
   };
+
   const getTodoId = () => String(new Date().getTime());
 
   const getValueAndClearInput = (inputField) => {
@@ -23,19 +24,6 @@
   const createTaskArray = (text) => state.tasks.push({
     id: getTodoId(), completed: false, value: text,
   });
-
-  const filterArr = (id) => {
-    switch (id) {
-      case 'completed':
-        return state.tasks.filter((task) => task.completed);
-
-      case 'active':
-        return state.tasks.filter((task) => !task.completed);
-
-      default:
-        return state.tasks;
-    }
-  };
 
   const putTasksOnTaskList = () => {
     taskList.innerHTML = '';
@@ -61,11 +49,12 @@
         case 'completedTask':
           if (task.id !== id) return task;
           newValueForEdit ? task.value = newValueForEdit : task.completed = !task.completed;
-
           break;
+
         case 'completedAllTasks':
           task.completed = target.checked;
           break;
+
         default:
           break;
       }
@@ -124,6 +113,7 @@
 
     createTaskArray(taskText);
     putTasksOnTaskList();
+
     createPanelInput.focus();
   };
 
@@ -159,7 +149,7 @@
     state.filter = event.target.id;
     putTasksOnTaskList();
   };
-
+  
   createButton.addEventListener('click', onClickCreateButton);
   taskList.addEventListener('click', onClickTaskList);
   controlPanel.addEventListener('click', onClickControlPanel);
