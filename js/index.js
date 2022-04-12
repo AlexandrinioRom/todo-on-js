@@ -1,15 +1,17 @@
 (function app() {
   const createPanelInput = document.querySelector('.create-panel__input');
-  // const filterPanelRado = document.querySelectorAll('.filter-panel__radio');
+  const filterPanelRadio = document.querySelectorAll('.filter-panel__radio');
+  const filterPanel = document.querySelector('.filter-panel');
   const controlPanel = document.querySelector('.control-panel');
   const createButton = document.querySelector('.create-panel__btn');
   const taskList = document.querySelector('.task-list');
 
+  const getFilterStatus = () => Array.from(filterPanelRadio).find((e) => e.checked).id;
+
   const state = {
     tasks: [],
-    filter: '',
+    filter: getFilterStatus(),
   };
-
   const getTodoId = () => String(new Date().getTime());
 
   const getValueAndClearInput = (inputField) => {
@@ -22,11 +24,26 @@
     id: getTodoId(), completed: false, value: text,
   });
 
+  const filterArr = (id) => {
+    switch (id) {
+      case 'completed':
+        return state.tasks.filter((task) => task.completed);
+
+      case 'active':
+        return state.tasks.filter((task) => !task.completed);
+
+      default:
+        break;
+    }
+    return state.tasks;
+  };
+
   const putTasksOnTaskList = () => {
     taskList.innerHTML = '';
-    state.tasks.map((e) => taskList.insertAdjacentHTML(
+
+    filterArr(state.filter).map((e) => taskList.insertAdjacentHTML(
       'beforeend',
-      `<div class="task flex ${e.completed ? 'complete' : ''}" id="${e.id}">
+      `<div class="task flex ${e.completed ? 'completed' : ''}" id="${e.id}">
         <input class="task__checkbox" ${e.completed ? 'checked' : ''} type="checkbox">
         <span class="task__text">${e.value}</span>
         <button class="task__btn" type="button">x</button>
@@ -34,11 +51,10 @@
     ));
   };
 
-  const customMap = (target, whatTodo, newValueForEdit) => {
+  const customMap = (whatTodo, target, newValueForEdit) => {
     const { id } = target;
     state.tasks = [
-      ...state.tasks.map((item) => {
-        const task = item;
+      ...state.tasks.map((task) => {
         switch (whatTodo) {
           case 'editTask':
           case 'completedTask':
@@ -76,10 +92,12 @@
   const editTask = (target) => {
     const input = createInput(target.innerHTML, target);
     const task = target.parentElement;
+
     task.replaceChild(input, target);
     input.focus();
+
     const onBlurTaskInput = () => {
-      customMap(task, 'editTask', input.value);
+      customMap('editTask', task, input.value);
       putTasksOnTaskList();
     };
 
@@ -98,7 +116,7 @@
   };
 
   const completeTask = (target) => {
-    customMap(target, 'completedTask');
+    customMap('completedTask', target);
     putTasksOnTaskList();
   };
 
@@ -137,7 +155,7 @@
   const onClickControlPanel = (event) => {
     const { target } = event;
     if (target.classList.contains('control-panel__checkbox')) {
-      customMap(target, 'completedAllTasks');
+      customMap('completedAllTasks', target);
       putTasksOnTaskList();
     }
     if (target.classList.contains('control-panel__delete-btn')) {
@@ -145,7 +163,13 @@
     }
   };
 
+  const onClickFilterPanel = (event) => {
+    state.filter = event.target.id;
+    putTasksOnTaskList();
+  };
+
   createButton.addEventListener('click', onClickCreateButton);
   taskList.addEventListener('click', onClickTaskList);
   controlPanel.addEventListener('click', onClickControlPanel);
+  filterPanel.addEventListener('click', onClickFilterPanel);
 }());

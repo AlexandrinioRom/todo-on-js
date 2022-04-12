@@ -22,7 +22,7 @@
 
 /* task-list styles start */
 
-.complete {
+.completed {
   text-decoration: line-through;
   color: gray;
 }
@@ -40,15 +40,15 @@
   color: blueviolet;
 }
 
-.all::after {
+#all::after {
   content: 'All';
 }
 
-.completed::after {
+#completed::after {
   content: 'Completed';
 }
 
-.active::after {
+#active::after {
   content: 'Active';
 }
 /* filter panel styles end */
