@@ -50,35 +50,29 @@
     ));
   };
 
-  const customMap = (whatTodo, target, newValueForEdit) => {
+  const modifyTask = (whatTodo, target, newValueForEdit) => {
     const { id } = target;
-    state.tasks = [
-      ...state.tasks.map((task) => {
-        switch (whatTodo) {
-          case 'editTask':
-          case 'completedTask':
-            if (task.id !== id) return task;
-            if (newValueForEdit) {
-              return {
-                ...task,
-                value: newValueForEdit,
-              };
-            }
-            return {
-              ...task,
-              completed: !task.completed,
-            };
-          case 'completedAllTasks':
-            return {
-              ...task,
-              completed: target.checked,
-            };
-          default:
+
+    state.tasks.forEach((item) => {
+      const task = item;
+      switch (whatTodo) {
+        case 'editTask':
+        case 'completedTask':
+          if (task.id !== id) return task;
+          if (newValueForEdit) {
+            task.value = newValueForEdit;
             break;
-        }
-        return null;
-      }),
-    ];
+          }
+          task.completed = !task.completed;
+          break;
+        case 'completedAllTasks':
+          task.completed = target.checked;
+          break;
+        default:
+          break;
+      }
+      return null;
+    });
   };
 
   const createInput = (taskText) => {
@@ -96,7 +90,7 @@
     input.focus();
 
     const onBlurTaskInput = () => {
-      customMap('editTask', task, input.value);
+      modifyTask('editTask', task, input.value);
       putTasksOnTaskList();
     };
 
@@ -115,12 +109,12 @@
   };
 
   const completeTask = (target) => {
-    customMap('completedTask', target);
+    modifyTask('completedTask', target);
     putTasksOnTaskList();
   };
 
   const deleteTask = (target) => {
-    state.tasks = [...state.tasks.filter((task) => task.id !== target.id)];
+    state.tasks = state.tasks.filter((task) => task.id !== target.id);
     putTasksOnTaskList();
   };
 
@@ -154,7 +148,7 @@
   const onClickControlPanel = (event) => {
     const { target } = event;
     if (target.classList.contains('control-panel__checkbox')) {
-      customMap('completedAllTasks', target);
+      modifyTask('completedAllTasks', target);
       putTasksOnTaskList();
     }
     if (target.classList.contains('control-panel__delete-btn')) {
