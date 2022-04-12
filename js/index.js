@@ -1,5 +1,4 @@
-// eslint-disable-next-line func-names
-(function () {
+(function app() {
   const createPanelInput = document.querySelector('.create-panel__input');
   // const filterPanelRado = document.querySelectorAll('.filter-panel__radio');
   const controlPanel = document.querySelector('.control-panel');
@@ -35,20 +34,34 @@
     ));
   };
 
-  const customMap = (id, newValueForEdit) => {
+  const customMap = (target, whatTodo, newValueForEdit) => {
+    const { id } = target;
     state.tasks = [
-      ...state.tasks.map((task) => {
-        if (task.id !== id) return task;
-        if (newValueForEdit) {
-          return {
-            ...task,
-            value: newValueForEdit,
-          };
+      ...state.tasks.map((item) => {
+        const task = item;
+        switch (whatTodo) {
+          case 'editTask':
+          case 'completedTask':
+            if (task.id !== id) return task;
+            if (newValueForEdit) {
+              return {
+                ...task,
+                value: newValueForEdit,
+              };
+            }
+            return {
+              ...task,
+              completed: !task.completed,
+            };
+          case 'completedAllTasks':
+            return {
+              ...task,
+              completed: target.checked,
+            };
+          default:
+            break;
         }
-        return {
-          ...task,
-          completed: !task.completed,
-        };
+        return null;
       }),
     ];
   };
@@ -66,7 +79,7 @@
     task.replaceChild(input, target);
     input.focus();
     const onBlurTaskInput = () => {
-      customMap(task.id, input.value);
+      customMap(task, 'editTask', input.value);
       putTasksOnTaskList();
     };
 
@@ -84,13 +97,13 @@
     input.addEventListener('keydown', onKeyDownTaskInput);
   };
 
-  const completeTask = (id) => {
-    customMap(id);
+  const completeTask = (target) => {
+    customMap(target, 'completedTask');
     putTasksOnTaskList();
   };
 
-  const deleteTask = (id) => {
-    state.tasks = [...state.tasks.filter((task) => task.id !== id)];
+  const deleteTask = (target) => {
+    state.tasks = [...state.tasks.filter((task) => task.id !== target.id)];
     putTasksOnTaskList();
   };
 
@@ -107,14 +120,13 @@
 
   const onClickTaskList = (event) => {
     const { target } = event;
-    const taskId = target.parentElement.id;
     if (target.classList.contains('task-list')) return;
 
     if (target.className === 'task__checkbox') {
-      completeTask(taskId);
+      completeTask(target.parentElement);
     }
     if (target.className === 'task__btn') {
-      deleteTask(taskId);
+      deleteTask(target.parentElement);
     }
 
     if (target.className === 'task__text' && event.detail === 2) {
@@ -125,7 +137,7 @@
   const onClickControlPanel = (event) => {
     const { target } = event;
     if (target.classList.contains('control-panel__checkbox')) {
-      state.tasks = [...state.tasks.map((task) => ({ ...task, completed: target.checked }))];
+      customMap(target, 'completedAllTasks');
       putTasksOnTaskList();
     }
     if (target.classList.contains('control-panel__delete-btn')) {
