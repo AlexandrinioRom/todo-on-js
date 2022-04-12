@@ -2,6 +2,7 @@
 (function () {
   const createPanelInput = document.querySelector('.create-panel__input');
   // const filterPanelRado = document.querySelectorAll('.filter-panel__radio');
+  const controlPanel = document.querySelector('.control-panel');
   const createButton = document.querySelector('.create-panel__btn');
   const taskList = document.querySelector('.task-list');
 
@@ -121,6 +122,18 @@
     }
   };
 
+  const onClickControlPanel = (event) => {
+    const { target } = event;
+    if (target.classList.contains('control-panel__checkbox')) {
+      state.tasks = [...state.tasks.map((task) => ({ ...task, completed: target.checked }))];
+      putTasksOnTaskList();
+    }
+    if (target.classList.contains('control-panel__delete-btn')) {
+      console.log(target);
+    }
+  };
+
   createButton.addEventListener('click', onClickCreateButton);
   taskList.addEventListener('click', onClickTaskList);
+  controlPanel.addEventListener('click', onClickControlPanel);
 }());
