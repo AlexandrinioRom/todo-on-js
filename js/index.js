@@ -55,15 +55,13 @@
 
     state.tasks.forEach((item) => {
       const task = item;
+
       switch (whatTodo) {
         case 'editTask':
         case 'completedTask':
           if (task.id !== id) return task;
-          if (newValueForEdit) {
-            task.value = newValueForEdit;
-            break;
-          }
-          task.completed = !task.completed;
+          newValueForEdit ? task.value = newValueForEdit : task.completed = !task.completed;
+
           break;
         case 'completedAllTasks':
           task.completed = target.checked;
