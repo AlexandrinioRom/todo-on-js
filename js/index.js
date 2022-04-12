@@ -60,11 +60,10 @@
   };
 
   const editTask = (target) => {
-    const input = createInput(target.innerHTML, target)
+    const input = createInput(target.innerHTML, target);
     const task = target.parentElement;
-    task.replaceChild(input, target)
+    task.replaceChild(input, target);
     const onKeyDownTaskInput = (event) => {
-
       if (event.keyCode === 13) {
         customMap(task.id, input.value);
         putTasksOnTaskList();
@@ -76,7 +75,7 @@
     };
 
     input.addEventListener('keydown', onKeyDownTaskInput);
-    input.focus()
+    input.focus();
   };
 
   const completeTask = (id) => {
@@ -119,5 +118,4 @@
 
   createButton.addEventListener('click', onClickCreateButton);
   taskList.addEventListener('click', onClickTaskList);
-
 }());
